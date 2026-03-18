@@ -3,6 +3,21 @@
 
 #include QMK_KEYBOARD_H
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (keycode == QK_GESC && record->event.pressed) {
+        uint8_t mods = get_mods();
+
+        if ((mods & MOD_MASK_CTRL) && !(mods & MOD_MASK_SHIFT)) {
+            del_mods(MOD_MASK_CTRL);
+            tap_code(KC_GRV);
+            set_mods(mods & ~MOD_MASK_CTRL);
+            return false;
+        }
+    }
+
+    return true;
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* Layer 0: Base */
